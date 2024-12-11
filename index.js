@@ -1,14 +1,10 @@
-// const { onRequest } = require("firebase-functions/v2/https");
-// const logger = require("firebase-functions/logger");
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
-// const { app } = require("firebase-functions");
-// const { Message } = require("firebase-functions/pubsub");
-
 const stripe = require("stripe")(process.env.STRIPE_KEY);
-const APP = express();
+
+const app = express();
 app.use(cors({ origin: true }));
 
 app.use(express.json());
@@ -21,6 +17,7 @@ app.get("/", (req, res) => {
 
 app.post("/payment/create", async (req, res) => {
   const total = req.query.total;
+
   if (total > 0) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: total,
@@ -36,9 +33,8 @@ app.post("/payment/create", async (req, res) => {
     });
   }
 });
-app.listen(5000, (err) => {
-  if (err) throw err;
-  console.log("Amazon Server Running on PORT: 5000, http://localhost : 5000");
-});
 
-exports.api = onRequest(APP);
+app.listen(3679, (err) => {
+  if (err) throw err;
+  console.log("Amazon server runing PORT: 3679, http://localhost:3679");
+});
